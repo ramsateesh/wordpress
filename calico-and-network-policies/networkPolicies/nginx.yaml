@@ -1,0 +1,29 @@
+- apiVersion: v1
+  kind: policy
+  metadata:
+    name: www.nginx-egress
+  spec:
+    egress:
+    - action: allow
+      destination:
+        selector: calico/k8s_ns == 'www' && app == 'nginx'
+      source: {}
+    order: 500
+    selector: calico/k8s_ns == 'www'
+    types:
+    - egress
+---
+- apiVersion: v1
+  kind: policy
+  metadata:
+    name: www.nginx-ingress
+  spec:
+    ingress:
+    - action: allow
+      destination: {}
+      source:
+        selector: calico/k8s_ns in {'www','default'}
+    order: 500
+    selector: calico/k8s_ns == 'www' && app == 'nginx'
+    types:
+    - ingress

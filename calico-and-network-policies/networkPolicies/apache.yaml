@@ -1,0 +1,33 @@
+- apiVersion: v1
+  kind: policy
+  metadata:
+    name: www.apache2-egress
+  spec:
+    egress:
+    - action: allow
+      destination:
+        selector: calico/k8s_ns == 'www' && app == 'apache2'
+      source: {}
+    order: 500
+    selector: calico/k8s_ns == 'www'
+    types:
+    - egress
+---
+- apiVersion: v1
+  kind: policy
+  metadata:
+    name: www.apache2-ingress
+  spec:
+    egress:
+    - action: allow
+      destination: {}
+      source: {}
+    ingress:
+    - action: allow
+      destination: {}
+      source:
+        selector: calico/k8s_ns == 'www'
+    order: 500
+    selector: calico/k8s_ns == 'www' && app == 'apache2'
+    types:
+    - ingress
